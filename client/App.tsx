@@ -8,6 +8,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Chat from "./pages/Chat";
+import PlaceholderPage from "@/components/app/PlaceholderPage";
+import { Header } from "@/components/app/Header";
+import { CrisisFooter } from "@/components/app/CrisisFooter";
 
 const queryClient = new QueryClient();
 
@@ -17,11 +21,22 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/chat" element={<Chat />} />
+              <Route path="/booking" element={<PlaceholderPage title="Confidential Booking" description="Calendar view with counselor availability, filters by specialty and language, slot booking, confirmation, and reminders will appear here." />} />
+              <Route path="/resources" element={<PlaceholderPage title="Psychoeducational Resource Hub" description="Searchable resources with filters and media players will appear here." />} />
+              <Route path="/forum" element={<PlaceholderPage title="Peer Support Forum" description="Anonymous threads with topic tags and moderation will appear here." />} />
+              <Route path="/admin" element={<PlaceholderPage title="Admin Dashboard" description="Usage trends, screenings completed, common concerns, and alerts will appear here." />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+          <CrisisFooter />
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
