@@ -62,7 +62,10 @@ export default function Chat() {
           <ShieldCheck className="h-4 w-4" />
           <AlertTitle>Talk to a counselor now</AlertTitle>
           <AlertDescription>
-            If you prefer human support, you can book a confidential session or call the helpline below.
+            <div className="flex flex-wrap items-center gap-3">
+              <span>If you prefer human support, you can book a confidential session or call the helpline below.</span>
+              <a href="/booking" className="inline-flex items-center gap-2 rounded-full bg-primary/90 text-primary-foreground px-3 py-1.5 text-xs">Book now</a>
+            </div>
           </AlertDescription>
         </Alert>
 
