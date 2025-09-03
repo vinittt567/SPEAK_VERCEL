@@ -27,7 +27,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/chat" element={<Chat />} />
-              <Route path="/booking" element={<PlaceholderPage title="Confidential Booking" description="Calendar view with counselor availability, filters by specialty and language, slot booking, confirmation, and reminders will appear here." />} />
+              <Route path="/booking" element={<Booking />} />
               <Route path="/resources" element={<PlaceholderPage title="Psychoeducational Resource Hub" description="Searchable resources with filters and media players will appear here." />} />
               <Route path="/forum" element={<PlaceholderPage title="Peer Support Forum" description="Anonymous threads with topic tags and moderation will appear here." />} />
               <Route path="/admin" element={<PlaceholderPage title="Admin Dashboard" description="Usage trends, screenings completed, common concerns, and alerts will appear here." />} />
