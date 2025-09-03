@@ -29,7 +29,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/chat" element={<Chat />} />
               <Route path="/booking" element={<Booking />} />
-              <Route path="/resources" element={<PlaceholderPage title="Psychoeducational Resource Hub" description="Searchable resources with filters and media players will appear here." />} />
+              <Route path="/resources" element={<Resources />} />
               <Route path="/forum" element={<PlaceholderPage title="Peer Support Forum" description="Anonymous threads with topic tags and moderation will appear here." />} />
               <Route path="/admin" element={<PlaceholderPage title="Admin Dashboard" description="Usage trends, screenings completed, common concerns, and alerts will appear here." />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
