@@ -12,6 +12,7 @@ import Chat from "./pages/Chat";
 import PlaceholderPage from "@/components/app/PlaceholderPage";
 import Booking from "./pages/Booking";
 import Resources from "./pages/Resources";
+import Forum from "./pages/Forum";
 import { Header } from "@/components/app/Header";
 import { CrisisFooter } from "@/components/app/CrisisFooter";
 
