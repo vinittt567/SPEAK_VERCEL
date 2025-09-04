@@ -18,7 +18,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between gap-3">
         <a href="/" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-xl bg-primary/10 grid place-items-center text-primary font-bold">🌿</div>
-          <span className="font-semibold tracking-tight">CalmCampus</span>
+          <span className="font-semibold tracking-tight">SPEAK</span>
         </a>
         <nav className="hidden md:flex items-center gap-1 rounded-full bg-muted px-1 py-1">
           {nav.map((i) => (
