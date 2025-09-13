@@ -2,8 +2,6 @@ import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { Download, AlertTriangle, Bell, BarChart2, Users, HeartPulse, MessageSquare } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell, BarChart, Bar, Tooltip } from "recharts";
@@ -59,7 +57,6 @@ const workload = [
 export default function Admin(){
   const [range, setRange] = useState("Last 30 days");
   const [campus, setCampus] = useState<"All" | Campus>("All");
-  const [focus, setFocus] = useState<null | "high" | "bookings" | "screenings" | "forum" | "resources">(null);
 
   const filtered = useMemo(()=> DATA.filter(d=> campus === "All" || d.campus === campus), [campus]);
   const totals = useMemo(()=>{
@@ -106,11 +103,11 @@ export default function Admin(){
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <KPI title="Screenings" value={totals.screenings.toLocaleString()} color="from-emerald-200 to-emerald-100" onClick={()=> setFocus("screenings")} icon={<HeartPulse className="h-4 w-4"/>} />
-        <KPI title="High-risk flags" value={totals.high.toLocaleString()} color="from-rose-200 to-rose-100" warn onClick={()=> setFocus("high")} icon={<AlertTriangle className="h-4 w-4"/>} />
-        <KPI title="Bookings" value={totals.bookings.toString()} color="from-sky-200 to-sky-100" onClick={()=> setFocus("bookings")} icon={<Users className="h-4 w-4"/>} />
-        <KPI title="Forum activity" value={totals.forum.toString()} color="from-violet-200 to-violet-100" onClick={()=> setFocus("forum")} icon={<MessageSquare className="h-4 w-4"/>} />
-        <KPI title="Resource engagement" value={totals.resource.toString()} color="from-amber-200 to-amber-100" onClick={()=> setFocus("resources")} icon={<BarChart2 className="h-4 w-4"/>} />
+        <KPI title="Screenings" value={totals.screenings.toLocaleString()} color="from-emerald-200 to-emerald-100" icon={<HeartPulse className="h-4 w-4"/>} />
+        <KPI title="High-risk flags" value={totals.high.toLocaleString()} color="from-rose-200 to-rose-100" warn icon={<AlertTriangle className="h-4 w-4"/>} />
+        <KPI title="Bookings" value={totals.bookings.toString()} color="from-sky-200 to-sky-100" icon={<Users className="h-4 w-4"/>} />
+        <KPI title="Forum activity" value={totals.forum.toString()} color="from-violet-200 to-violet-100" icon={<MessageSquare className="h-4 w-4"/>} />
+        <KPI title="Resource engagement" value={totals.resource.toString()} color="from-amber-200 to-amber-100" icon={<BarChart2 className="h-4 w-4"/>} />
       </div>
 
       <div className="grid xl:grid-cols-3 gap-6">
@@ -200,37 +197,6 @@ export default function Admin(){
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-base">Drilldown</CardTitle></CardHeader>
-          <CardContent className="text-sm space-y-2">
-            {!focus && <div className="text-muted-foreground">Select a KPI or chart to view details.</div>}
-            {focus === "high" && (
-              <div>
-                <div className="font-medium">High-risk flags (trend)</div>
-                <SmallLine data={aggregateByDate(filtered).map(d=> ({ date:d.date, value:d.phq*0.1 + d.gad*0.1 }))} color="#ef4444" />
-                <div className="text-xs text-muted-foreground">Anonymized cases by day. Use for response planning.</div>
-              </div>
-            )}
-            {focus === "bookings" && (
-              <div>
-                <div className="font-medium">Bookings by counselor</div>
-                <SmallBars data={workload.map(w=> ({ name:w.name, value:w.sessions }))} color="#6366f1" />
-              </div>
-            )}
-            {focus === "screenings" && (
-              <div>
-                <div className="font-medium">PHQ-9 vs GAD-7 totals</div>
-                <div className="text-xs">PHQ-9: {filtered.reduce((a,b)=> a+b.phq,0)} • GAD-7: {filtered.reduce((a,b)=> a+b.gad,0)}</div>
-              </div>
-            )}
-            {focus === "forum" && (
-              <div className="text-xs">Threads created: 42 • Flags: 3 • Active volunteers: 5</div>
-            )}
-            {focus === "resources" && (
-              <div className="text-xs">Most accessed: Audio • Avg duration played: 6m • Top topic: Stress</div>
-            )}
-          </CardContent>
-        </Card>
       </div>
 
       <Card className="bg-muted/40">
@@ -266,29 +232,5 @@ function AlertItem({ text, level }: { text: string; level: "high" | "warn" | "in
       <Bell className="h-4 w-4 mt-0.5"/>
       <span>{text}</span>
     </div>
-  );
-}
-
-function SmallLine({ data, color }: { data: { date: string; value: number }[]; color: string }){
-  return (
-    <ChartContainer config={{ value:{ label:"", color } }} className="h-28">
-      <LineChart data={data}>
-        <XAxis dataKey="date" hide/>
-        <YAxis hide/>
-        <Line type="monotone" dataKey="value" stroke="var(--color-value)" strokeWidth={2} dot={false} />
-      </LineChart>
-    </ChartContainer>
-  );
-}
-
-function SmallBars({ data, color }: { data: { name: string; value: number }[]; color: string }){
-  return (
-    <ChartContainer config={{ value:{ label:"", color } }} className="h-28">
-      <BarChart data={data}>
-        <XAxis dataKey="name" hide/>
-        <YAxis hide/>
-        <Bar dataKey="value" fill="var(--color-value)" radius={[4,4,0,0]} />
-      </BarChart>
-    </ChartContainer>
   );
 }

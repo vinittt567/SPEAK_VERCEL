@@ -13,7 +13,6 @@ import { Switch } from "@/components/ui/switch";
 import { CalendarDays, HelpCircle, Lock, Video, MapPin, CheckCircle2 } from "lucide-react";
 import { format, isBefore, isSameDay, isToday, parse } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
 
 interface Counselor {
   id: string;
@@ -32,7 +31,7 @@ const COUNSELORS: Counselor[] = [
 ];
 
 const SPECIALTIES = ["Stress", "Anxiety", "Career"] as const;
-const LANGS = ["English", "Español", "Français", "Hindi", "中文"] as const;
+const LANGS = ["English", "Hindi", "Kashmiri"] as const;
 const MODES = ["Online", "In-person", "Both"] as const;
 
 const DEFAULT_SLOTS = [
@@ -102,7 +101,6 @@ export default function Booking(){
     <div className="container py-8 space-y-6">
       <div className="flex items-center justify-between gap-3">
         <h1 className="text-3xl font-bold tracking-tight">Confidential Booking</h1>
-        <Link to="/chat" className="text-sm text-primary underline">Need urgent help? Talk now</Link>
       </div>
 
       <Steps current={slot ? 3 : counselor ? 2 : 1} />
@@ -227,7 +225,6 @@ export default function Booking(){
 
               <div className="md:col-span-2 flex flex-wrap gap-3">
                 <Button disabled={!canConfirm} onClick={()=> setOpenConfirm(true)} className="rounded-full">Review & Confirm</Button>
-                <Button variant="outline" asChild className="rounded-full"><Link to="/chat">Need urgent help? Talk now</Link></Button>
               </div>
             </CardContent>
           </Card>
