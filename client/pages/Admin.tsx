@@ -187,7 +187,7 @@ export default function Admin(){
         </Card>
       </div>
 
-      <div className="grid lg:grid-cols-[2fr_1fr] gap-6">
+      <div className="grid gap-6">
         <Card>
           <CardHeader className="pb-2"><CardTitle className="text-base">Alerts</CardTitle></CardHeader>
           <CardContent className="space-y-3">
