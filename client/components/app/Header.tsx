@@ -1,6 +1,7 @@
 import { Lock, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./ThemeToggle";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -36,6 +37,7 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <div className="hidden sm:flex items-center text-xs text-muted-foreground gap-1">
             <Lock className="h-4 w-4" />
             <span>Private • Pseudonym: Student{new Date().getDate()}</span>
