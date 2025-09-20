@@ -2,6 +2,8 @@ import { Lock, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
+import { useState } from "react";
+import { StarrySky } from "./StarrySky";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -14,6 +16,7 @@ const nav = [
 
 export function Header() {
   const path = typeof window !== "undefined" ? window.location.pathname : "/";
+  const [showStars, setShowStars] = useState(false);
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between gap-3">
@@ -37,7 +40,7 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <ThemeToggle />
+          <ThemeToggle onDarkEnabled={()=> setShowStars(true)} />
           <div className="hidden sm:flex items-center text-xs text-muted-foreground gap-1">
             <Lock className="h-4 w-4" />
             <span>Private • Pseudonym: Student{new Date().getDate()}</span>
@@ -51,6 +54,7 @@ export function Header() {
             </Button>
           )}
         </div>
+        {showStars && <StarrySky onDone={()=> setShowStars(false)} />}
       </div>
     </header>
   );
