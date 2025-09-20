@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
 import { useState } from "react";
 import { StarrySky } from "./StarrySky";
-import { DarkStarfield } from "./DarkStarfield";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -57,7 +56,6 @@ export function Header() {
         </div>
         {showStars && <StarrySky onDone={()=> setShowStars(false)} />}
       </div>
-      <DarkStarfield />
     </header>
   );
 }
