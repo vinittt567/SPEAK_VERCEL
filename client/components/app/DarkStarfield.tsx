@@ -124,12 +124,13 @@ export function DarkStarfield(){
     return ()=>{ if(rafRef.current != null) cancelAnimationFrame(rafRef.current); rafRef.current = null; };
   }, [theme]);
 
+  if (theme !== "dark") return null;
   return (
     <canvas
       ref={canvasRef}
       aria-hidden
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0, display: theme === "dark" ? "block" : "none" }}
+      style={{ zIndex: 0 }}
     />
   );
 }
