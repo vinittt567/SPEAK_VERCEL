@@ -15,13 +15,15 @@ import Forum from "./pages/Forum";
 import Admin from "./pages/Admin";
 import { Header } from "@/components/app/Header";
 import { CrisisFooter } from "@/components/app/CrisisFooter";
+import { DarkStarfield } from "@/components/app/DarkStarfield";
 
 const App = () => (
   <TooltipProvider>
     <Toaster />
     <Sonner />
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col relative">
+      <DarkStarfield />
+      <div className="min-h-screen flex flex-col relative z-[1]">
         <Header />
         <main className="flex-1">
           <Routes>
