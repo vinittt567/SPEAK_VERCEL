@@ -1,0 +1,101 @@
+[
+  {
+    "id": "stu001",
+    "email": "john.doe@ju.ac.in",
+    "password": "$2b$10$example1hash",
+    "institution_id": "ju001",
+    "name": "John Doe",
+    "course": "Computer Science",
+    "year": 3
+  },
+  {
+    "id": "stu002", 
+    "email": "sarah.khan@cukashmir.ac.in",
+    "password": "$2b$10$example2hash",
+    "institution_id": "cuk001",
+    "name": "Sarah Khan",
+    "course": "Psychology",
+    "year": 2
+  },
+  {
+    "id": "stu003",
+    "email": "ahmed.malik@nitsri.ac.in", 
+    "password": "$2b$10$example3hash",
+    "institution_id": "nit001",
+    "name": "Ahmed Malik",
+    "course": "Electrical Engineering",
+    "year": 4
+  },
+  {
+    "id": "stu004",
+    "email": "priya.sharma@iiim.ac.in",
+    "password": "$2b$10$example4hash", 
+    "institution_id": "iiim001",
+    "name": "Priya Sharma",
+    "course": "Biotechnology",
+    "year": 1
+  },
+  {
+    "id": "stu005",
+    "email": "mohit.gupta@skuastkashmir.ac.in",
+    "password": "$2b$10$example5hash",
+    "institution_id": "skuast001", 
+    "name": "Mohit Gupta",
+    "course": "Agriculture",
+    "year": 2
+  },
+  {
+    "id": "stu006",
+    "email": "fatima.ali@iust.ac.in",
+    "password": "$2b$10$example6hash",
+    "institution_id": "iust001",
+    "name": "Fatima Ali", 
+    "course": "Islamic Studies",
+    "year": 3
+  },
+  {
+    "id": "stu007",
+    "email": "rahul.singh@bgsbu.ac.in",
+    "password": "$2b$10$example7hash",
+    "institution_id": "bgsbu001",
+    "name": "Rahul Singh",
+    "course": "Business Administration", 
+    "year": 4
+  },
+  {
+    "id": "stu008",
+    "email": "zara.ahmad@cusrinagar.ac.in",
+    "password": "$2b$10$example8hash",
+    "institution_id": "cluster001",
+    "name": "Zara Ahmad",
+    "course": "English Literature",
+    "year": 1
+  },
+  {
+    "id": "stu009",
+    "email": "vikram.kumar@cujammu.ac.in", 
+    "password": "$2b$10$example9hash",
+    "institution_id": "cluster002",
+    "name": "Vikram Kumar",
+    "course": "Mathematics",
+    "year": 3
+  },
+  {
+    "id": "stu010",
+    "email": "aisha.bhat@kashmiruniversity.ac.in",
+    "password": "$2b$10$example10hash",
+    "institution_id": "kuc001",
+    "name": "Aisha Bhat", 
+    "course": "Political Science",
+    "year": 2
+  },
+  {
+    "id": "stu011",
+    "email": "test.student@ju.ac.in",
+    "password": "$2b$10$exampleTestHash",
+    "institution_id": "ju001",
+    "name": "Test Student",
+    "course": "Computer Science",
+    "year": 1
+  }
+]

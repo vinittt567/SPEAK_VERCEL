@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import aiRoutes from "./routes/ai";
+import authRoutes from "./routes/auth";
 
 export function createServer() {
   const app = express();
@@ -22,6 +23,9 @@ export function createServer() {
   
   // AI routes
   app.use("/api/ai", aiRoutes);
+  
+  // Authentication routes
+  app.use("/api/auth", authRoutes);
 
   return app;
 }

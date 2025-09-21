@@ -1,0 +1,82 @@
+[
+  {
+    "id": "ju001",
+    "name": "University of Jammu",
+    "domain": "ju.ac.in",
+    "type": "university",
+    "location": "Jammu",
+    "state": "Jammu and Kashmir"
+  },
+  {
+    "id": "cuk001",
+    "name": "Central University of Kashmir",
+    "domain": "cukashmir.ac.in",
+    "type": "university",
+    "location": "Ganderbal",
+    "state": "Jammu and Kashmir"
+  },
+  {
+    "id": "nit001",
+    "name": "National Institute of Technology Srinagar",
+    "domain": "nitsri.ac.in",
+    "type": "institute",
+    "location": "Srinagar",
+    "state": "Jammu and Kashmir"
+  },
+  {
+    "id": "iiim001",
+    "name": "Indian Institute of Integrative Medicine",
+    "domain": "iiim.ac.in",
+    "type": "institute",
+    "location": "Jammu",
+    "state": "Jammu and Kashmir"
+  },
+  {
+    "id": "skuast001",
+    "name": "Sher-e-Kashmir University of Agricultural Sciences and Technology",
+    "domain": "skuastkashmir.ac.in",
+    "type": "university",
+    "location": "Srinagar",
+    "state": "Jammu and Kashmir"
+  },
+  {
+    "id": "iust001",
+    "name": "Islamic University of Science and Technology",
+    "domain": "iust.ac.in",
+    "type": "university",
+    "location": "Awantipora",
+    "state": "Jammu and Kashmir"
+  },
+  {
+    "id": "bgsbu001",
+    "name": "Baba Ghulam Shah Badshah University",
+    "domain": "bgsbu.ac.in",
+    "type": "university",
+    "location": "Rajouri",
+    "state": "Jammu and Kashmir"
+  },
+  {
+    "id": "cluster001",
+    "name": "Cluster University Srinagar",
+    "domain": "cusrinagar.ac.in",
+    "type": "university",
+    "location": "Srinagar",
+    "state": "Jammu and Kashmir"
+  },
+  {
+    "id": "cluster002",
+    "name": "Cluster University Jammu",
+    "domain": "cujammu.ac.in",
+    "type": "university",
+    "location": "Jammu",
+    "state": "Jammu and Kashmir"
+  },
+  {
+    "id": "kuc001",
+    "name": "Kashmir University College",
+    "domain": "kashmiruniversity.ac.in",
+    "type": "college",
+    "location": "Srinagar",
+    "state": "Jammu and Kashmir"
+  }
+]

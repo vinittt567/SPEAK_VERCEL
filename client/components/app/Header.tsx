@@ -1,6 +1,14 @@
-import { Lock, Bot } from "lucide-react";
+import { Lock, Bot, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -13,6 +21,13 @@ const nav = [
 
 export function Header() {
   const path = typeof window !== "undefined" ? window.location.pathname : "/";
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = '/login';
+  };
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between gap-3">
@@ -36,10 +51,45 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center text-xs text-muted-foreground gap-1">
-            <Lock className="h-4 w-4" />
-            <span>Private • Pseudonym: Student{new Date().getDate()}</span>
-          </div>
+          {user ? (
+            <>
+              <div className="hidden sm:flex items-center text-xs text-muted-foreground gap-1">
+                <Lock className="h-4 w-4" />
+                <span>Anonymous ID: {user.anonymousId.slice(0, 12)}...</span>
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="rounded-full">
+                    <User className="h-4 w-4 mr-2" />
+                    Profile
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem disabled>
+                    <div className="flex flex-col">
+                      <span className="font-medium">Course: {user.profileData.course}</span>
+                      <span className="text-xs text-muted-foreground">Year: {user.profileData.year}</span>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : (
+            <>
+              <div className="hidden sm:flex items-center text-xs text-muted-foreground gap-1">
+                <Lock className="h-4 w-4" />
+                <span>Not authenticated</span>
+              </div>
+              <Button asChild variant="outline" size="sm" className="rounded-full">
+                <a href="/login">Login</a>
+              </Button>
+            </>
+          )}
           {path !== "/chat" && (
             <Button asChild className="rounded-full">
               <a href="/chat" className="flex items-center gap-2">
