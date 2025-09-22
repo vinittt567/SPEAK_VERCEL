@@ -17,9 +17,6 @@ export function InstituteHeader() {
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button asChild variant="outline" className="rounded-full">
-            <a href="/admin">Admin</a>
-          </Button>
           <Button
             className="rounded-full"
             onClick={() => {

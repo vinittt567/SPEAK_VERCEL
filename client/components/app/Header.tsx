@@ -17,7 +17,6 @@ const nav = [
   { to: "/booking", label: "Booking" },
   { to: "/resources", label: "Resources" },
   { to: "/forum", label: "Forum" },
-  { to: "/admin", label: "Admin" },
 ];
 
 export function Header() {

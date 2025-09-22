@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Heart, MessageSquare, Flag, Pin, Lock, Trash2, Crown, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -48,14 +48,38 @@ export default function Forum(){
   const [search, setSearch] = useState("");
   const [topic, setTopic] = useState<string>("All");
   const [sort, setSort] = useState<string>("Newest");
-  const [threads, setThreads] = useState<Thread[]>(SEED);
-  const [selected, setSelected] = useState<Thread | null>(SEED[0]);
+  const [threads, setThreads] = useState<Thread[]>(() => {
+    const saved = localStorage.getItem('forum-threads');
+    return saved ? JSON.parse(saved) : SEED;
+  });
+  const [selected, setSelected] = useState<Thread | null>(() => {
+    const saved = localStorage.getItem('forum-selected');
+    if (saved) {
+      const selectedId = JSON.parse(saved);
+      const savedThreads = localStorage.getItem('forum-threads');
+      const threadsData = savedThreads ? JSON.parse(savedThreads) : SEED;
+      return threadsData.find((t: Thread) => t.id === selectedId) || SEED[0];
+    }
+    return SEED[0];
+  });
   const [newOpen, setNewOpen] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newBody, setNewBody] = useState("");
   const [newTopic, setNewTopic] = useState<Topic>("General");
   const [anon, setAnon] = useState(true);
   const [modMode, setModMode] = useState(false);
+
+  // Save threads to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('forum-threads', JSON.stringify(threads));
+  }, [threads]);
+
+  // Save selected thread to localStorage whenever it changes
+  useEffect(() => {
+    if (selected) {
+      localStorage.setItem('forum-selected', JSON.stringify(selected.id));
+    }
+  }, [selected]);
 
   const listEndRef = useRef<HTMLDivElement | null>(null);
   const [showCount, setShowCount] = useState(6);
@@ -190,7 +214,10 @@ export default function Forum(){
 
       <Dialog open={newOpen} onOpenChange={setNewOpen}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Create a post</DialogTitle></DialogHeader>
+          <DialogHeader>
+            <DialogTitle>Create a post</DialogTitle>
+            <DialogDescription>Share your thoughts and connect with the community</DialogDescription>
+          </DialogHeader>
           <div className="grid gap-3">
             <Input placeholder="Title" value={newTitle} onChange={(e)=> setNewTitle(e.target.value)} />
             <Select value={newTopic} onValueChange={(v)=> setNewTopic(v as Topic)}>
