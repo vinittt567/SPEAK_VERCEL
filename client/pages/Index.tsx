@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Shield, Globe, Bot, CalendarCheck2 } from "lucide-react";
+import { Shield, Globe, Bot, CalendarCheck2, GraduationCap, Building2, UserCheck, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Index() {
@@ -38,6 +38,8 @@ export default function Index() {
                 <Shield className="h-4 w-4"/> Pseudonym only. No names required.
               </div>
             </div>
+
+
 
             <div className="grid sm:grid-cols-2 gap-4 pt-2">
               <Card className="bg-background/60">

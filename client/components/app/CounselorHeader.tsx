@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/app/ThemeToggle";
 
 export function CounselorHeader() {
   return (
@@ -11,6 +12,7 @@ export function CounselorHeader() {
           <span className="font-semibold tracking-tight">Counselor Panel</span>
         </a>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Button
             className="rounded-full"
             onClick={() => {

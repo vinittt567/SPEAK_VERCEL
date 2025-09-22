@@ -2,6 +2,7 @@ import { Lock, Bot, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
+import { ThemeToggle } from "@/components/app/ThemeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -59,6 +60,7 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           {user ? (
             <>
               <div className="hidden sm:flex items-center text-xs text-muted-foreground gap-1">

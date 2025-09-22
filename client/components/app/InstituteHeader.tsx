@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/app/ThemeToggle";
 
 export function InstituteHeader() {
   return (
@@ -15,6 +16,7 @@ export function InstituteHeader() {
           </a>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Button asChild variant="outline" className="rounded-full">
             <a href="/admin">Admin</a>
           </Button>

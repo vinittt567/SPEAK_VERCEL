@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, LogIn, Shield, Eye, EyeOff } from 'lucide-react';
+import { Loader2, LogIn, Shield, Building2, UserCheck, Settings } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 
 export default function Login() {
@@ -89,7 +89,7 @@ export default function Login() {
               </Button>
             </form>
 
-            <div className="mt-6 space-y-3">
+            <div className="mt-6 space-y-4">
               <div className="text-center">
                 <Button variant="link" asChild>
                   <a href="/register">Don't have an Anonymous ID? Register here</a>
@@ -99,6 +99,33 @@ export default function Login() {
               <div className="flex items-center gap-2 text-sm text-muted-foreground bg-blue-50 p-3 rounded-lg">
                 <Shield className="h-4 w-4 text-blue-600" />
                 <span>Your anonymous ID protects your identity while accessing counseling services.</span>
+              </div>
+
+              {/* Professional Login Options */}
+              <div className="border-t pt-4">
+                <p className="text-sm text-muted-foreground text-center mb-3">
+                  Professional Access
+                </p>
+                <div className="flex gap-2 justify-center">
+                  <Button asChild variant="outline" size="sm">
+                    <a href="/login/institute" className="flex items-center gap-1">
+                      <Building2 className="h-3 w-3" />
+                      Institute
+                    </a>
+                  </Button>
+                  <Button asChild variant="outline" size="sm">
+                    <a href="/login/counselor" className="flex items-center gap-1">
+                      <UserCheck className="h-3 w-3" />
+                      Counselor
+                    </a>
+                  </Button>
+                  <Button asChild variant="outline" size="sm">
+                    <a href="/login/admin" className="flex items-center gap-1">
+                      <Settings className="h-3 w-3" />
+                      Admin
+                    </a>
+                  </Button>
+                </div>
               </div>
             </div>
           </CardContent>
