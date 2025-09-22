@@ -11,14 +11,12 @@ const baseNav = [
   { to: "/booking", label: "Booking" },
   { to: "/resources", label: "Resources" },
   { to: "/forum", label: "Forum" },
-  { to: "/admin", label: "Admin" },
 ] as const;
 
 export function Header() {
   const path = typeof window !== "undefined" ? window.location.pathname : "/";
   const [showStars, setShowStars] = useState(false);
-  const hideAdmin = path.startsWith("/panel/student") || path.startsWith("/panel/counselor");
-  const nav = hideAdmin ? baseNav.filter(i=> i.label !== "Admin") : baseNav as any;
+  const nav = baseNav as any;
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between gap-3">
