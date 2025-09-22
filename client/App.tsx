@@ -12,7 +12,6 @@ import PlaceholderPage from "@/components/app/PlaceholderPage";
 import Booking from "./pages/Booking";
 import Resources from "./pages/Resources";
 import Forum from "./pages/Forum";
-import Admin from "./pages/Admin";
 import LoginStudent from "./pages/LoginStudent";
 import LoginInstitute from "./pages/LoginInstitute";
 import LoginAdmin from "./pages/LoginAdmin";
@@ -40,13 +39,12 @@ const App = () => (
             <Route path="/booking" element={<Booking />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/forum" element={<Forum />} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin" element={<PanelAdmin />} />
             <Route path="/login/student" element={<LoginStudent />} />
             <Route path="/login/institute" element={<LoginInstitute />} />
             <Route path="/login/admin" element={<LoginAdmin />} />
             <Route path="/panel/student" element={<PanelStudent />} />
             <Route path="/panel/institute" element={<PanelInstitute />} />
-            <Route path="/panel/admin" element={<PanelAdmin />} />
             <Route path="/login/counselor" element={<LoginCounselor />} />
             <Route path="/panel/counselor" element={<PanelCounselor />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
