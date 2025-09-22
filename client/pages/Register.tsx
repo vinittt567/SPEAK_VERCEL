@@ -13,6 +13,9 @@ import { toast } from '@/components/ui/use-toast';
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [course, setCourse] = useState('');
+  const [year, setYear] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -41,7 +44,7 @@ export default function Register() {
     setIsSubmitting(true);
 
     try {
-      const result = await register(email, password);
+      const result = await register(email, password, name, course, parseInt(year) || 1);
       if (result.success) {
         setAnonymousId(result.user.anonymousId);
         setShowAnonymousId(true);
@@ -53,7 +56,18 @@ export default function Register() {
         setError('Registration failed. Please check your credentials.');
       }
     } catch (err: any) {
-      setError(err.message || 'Registration failed. Please try again.');
+      const errorMessage = err.message || 'Registration failed. Please try again.';
+      
+      // Handle specific error codes
+      if (errorMessage.includes('Institution not recognized')) {
+        setError('Please use your institutional email address from a supported institution.');
+      } else if (errorMessage.includes('already exists')) {
+        setError('An account with this email already exists. Please login instead.');
+      } else if (errorMessage.includes('Password must be at least')) {
+        setError('Password must be at least 6 characters long.');
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -102,16 +116,18 @@ export default function Register() {
                   disabled={isSubmitting}
                 />
               </div>
+              
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your password"
+                    placeholder="Enter your password (min 6 characters)"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    minLength={6}
                     disabled={isSubmitting}
                   />
                   <Button
@@ -128,6 +144,45 @@ export default function Register() {
                       <Eye className="h-4 w-4" />
                     )}
                   </Button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="name">Full Name (Optional)</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Your full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="course">Course (Optional)</Label>
+                  <Input
+                    id="course"
+                    type="text"
+                    placeholder="Computer Science"
+                    value={course}
+                    onChange={(e) => setCourse(e.target.value)}
+                    disabled={isSubmitting}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="year">Year (Optional)</Label>
+                  <Input
+                    id="year"
+                    type="number"
+                    placeholder="1"
+                    min="1"
+                    max="6"
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                    disabled={isSubmitting}
+                  />
                 </div>
               </div>
 

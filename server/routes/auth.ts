@@ -98,12 +98,20 @@ router.post('/register', async (req: Request, res: Response) => {
     await connectToDatabase();
     await initializeMockData();
 
-    const { email, password } = req.body;
+    const { email, password, name, course, year } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
         error: 'Email and password are required',
         code: 'MISSING_CREDENTIALS'
+      });
+    }
+
+    // Basic password validation
+    if (password.length < 6) {
+      return res.status(400).json({
+        error: 'Password must be at least 6 characters long',
+        code: 'WEAK_PASSWORD'
       });
     }
 
@@ -113,54 +121,72 @@ router.post('/register', async (req: Request, res: Response) => {
 
     if (!institution) {
       return res.status(401).json({
-        error: 'Institution not recognized',
+        error: 'Institution not recognized. Please use your institutional email address.',
         code: 'INVALID_INSTITUTION'
       });
     }
 
-    // Find all students for this institution and check email match
+    // Check if user already exists (by checking if anonymous user with this email hash exists)
+    const hashedEmail = await hashString(email);
+    const existingUser = await AnonymousUser.findOne({
+      institutionHash: generateInstitutionHash(institution.domain)
+    });
+
+    // For existing users, we need to check if this specific email was already used
+    // Since we can't reverse hash, we'll check against temp students first
     const studentsFromInstitution = await TempStudent.find({ 
       institutionId: institution.institutionId 
     });
 
-    let matchingStudent = null;
+    let existingStudent = null;
     for (const student of studentsFromInstitution) {
       const emailMatches = await compareHash(email, student.hashedEmail);
       if (emailMatches) {
-        matchingStudent = student;
+        existingStudent = student;
         break;
       }
     }
 
-    if (!matchingStudent) {
-      return res.status(401).json({
-        error: 'Student not found',
-        code: 'STUDENT_NOT_FOUND'
-      });
-    }
-
-    // Verify password
-    const isPasswordValid = await compareHash(password, matchingStudent.hashedPassword);
-    if (!isPasswordValid) {
-      return res.status(401).json({
-        error: 'Invalid credentials',
-        code: 'INVALID_CREDENTIALS'
+    if (existingStudent) {
+      return res.status(409).json({
+        error: 'An account with this email already exists. Please login instead.',
+        code: 'USER_EXISTS'
       });
     }
 
     // Generate anonymous ID using the original email
     const salt = generateSalt();
-    const hashedEmailForId = await hashString(email);
-    const anonymousId = generateAnonymousId(hashedEmailForId, salt);
+    const anonymousId = generateAnonymousId(hashedEmail, salt);
     const institutionHash = generateInstitutionHash(institution.domain);
+
+    // Check if this anonymous ID already exists (very unlikely but good to check)
+    const existingAnonymousUser = await AnonymousUser.findOne({ anonymousId });
+    if (existingAnonymousUser) {
+      return res.status(409).json({
+        error: 'Registration conflict. Please try again.',
+        code: 'ID_CONFLICT'
+      });
+    }
+
+    // Create temporary student record for this registration
+    const hashedPassword = await hashString(password);
+    const tempStudent = await TempStudent.create({
+      studentId: `temp_${Date.now()}`,
+      hashedEmail,
+      hashedPassword,
+      institutionId: institution.institutionId,
+      name: name || 'Student',
+      course: course || 'Not specified',
+      year: year || 1
+    });
 
     // Create anonymous user profile
     const anonymousUser = await AnonymousUser.create({
       anonymousId,
       institutionHash,
       profileData: {
-        course: matchingStudent.course,
-        year: matchingStudent.year,
+        course: course || 'Not specified',
+        year: year || 1,
         joinedAt: new Date()
       }
     });
@@ -186,7 +212,7 @@ router.post('/register', async (req: Request, res: Response) => {
     });
 
     // DELETE the temporary student record to ensure no PII retention
-    await TempStudent.findByIdAndDelete(matchingStudent._id);
+    await TempStudent.findByIdAndDelete(tempStudent._id);
 
     res.json({
       success: true,
@@ -200,7 +226,7 @@ router.post('/register', async (req: Request, res: Response) => {
     });
 
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('Registration error:', error);
     res.status(500).json({
       error: 'Internal server error',
       code: 'SERVER_ERROR'
@@ -360,6 +386,44 @@ router.get('/verify', authenticateToken, (req: Request, res: Response) => {
       institutionHash: req.user!.institutionHash
     }
   });
+});
+
+/**
+ * GET /api/auth/institutions
+ * Get list of supported institutions
+ */
+router.get('/institutions', async (req: Request, res: Response) => {
+  try {
+    await connectToDatabase();
+    await initializeMockData();
+
+    const institutions = await Institution.find({}, {
+      name: 1,
+      domain: 1,
+      type: 1,
+      location: 1,
+      state: 1,
+      _id: 0
+    }).sort({ name: 1 });
+
+    res.json({
+      success: true,
+      institutions: institutions.map(inst => ({
+        name: inst.name,
+        domain: inst.domain,
+        type: inst.type,
+        location: inst.location,
+        state: inst.state
+      }))
+    });
+
+  } catch (error) {
+    console.error('Institutions fetch error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      code: 'SERVER_ERROR'
+    });
+  }
 });
 
 export default router;

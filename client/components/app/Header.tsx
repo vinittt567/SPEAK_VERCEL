@@ -23,9 +23,17 @@ export function Header() {
   const path = typeof window !== "undefined" ? window.location.pathname : "/";
   const { user, logout } = useAuth();
 
-  const handleLogout = () => {
-    logout();
-    window.location.href = '/login';
+  const handleLogout = async () => {
+    try {
+      console.log('Logout button clicked, starting logout process...');
+      await logout();
+      console.log('Logout completed, redirecting to login...');
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Still redirect even if logout API fails
+      window.location.href = '/login';
+    }
   };
 
   return (

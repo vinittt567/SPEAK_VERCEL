@@ -14,7 +14,7 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   login: (anonymousId: string) => Promise<boolean>;
-  register: (email: string, password: string) => Promise<{success: boolean, user?: User}>;
+  register: (email: string, password: string, name?: string, course?: string, year?: number) => Promise<{success: boolean, user?: User}>;
   anonymousLogin: (anonymousId: string) => Promise<boolean>;
   logout: () => void;
   verifyToken: () => Promise<boolean>;
@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   };
 
-  const register = async (email: string, password: string): Promise<{success: boolean, user?: User}> => {
+  const register = async (email: string, password: string, name?: string, course?: string, year?: number): Promise<{success: boolean, user?: User}> => {
     try {
       setIsLoading(true);
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -84,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, name, course, year }),
       });
 
       const data = await response.json();
@@ -185,20 +185,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
+    console.log('Logout function called, token:', token ? 'exists' : 'null');
     try {
       if (token) {
-        await fetch(`${API_BASE_URL}/auth/logout`, {
+        console.log('Making logout API call...');
+        const response = await fetch(`${API_BASE_URL}/auth/logout`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
+        
+        if (!response.ok) {
+          console.warn('Logout API call failed, but clearing local state anyway');
+        } else {
+          console.log('Logout API call successful');
+        }
       }
     } catch (error) {
       console.error('Logout error:', error);
+      // Continue with clearing state even if API call fails
     } finally {
+      console.log('Clearing auth state...');
       clearAuthState();
+      console.log('Auth state cleared');
     }
   };
 
