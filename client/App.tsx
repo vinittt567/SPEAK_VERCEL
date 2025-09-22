@@ -13,6 +13,12 @@ import Booking from "./pages/Booking";
 import Resources from "./pages/Resources";
 import Forum from "./pages/Forum";
 import Admin from "./pages/Admin";
+import LoginStudent from "./pages/LoginStudent";
+import LoginInstitute from "./pages/LoginInstitute";
+import LoginAdmin from "./pages/LoginAdmin";
+import PanelStudent from "./pages/PanelStudent";
+import PanelInstitute from "./pages/PanelInstitute";
+import PanelAdmin from "./pages/PanelAdmin";
 import { Header } from "@/components/app/Header";
 import { CrisisFooter } from "@/components/app/CrisisFooter";
 import { DarkStarfield } from "@/components/app/DarkStarfield";
@@ -33,6 +39,12 @@ const App = () => (
             <Route path="/resources" element={<Resources />} />
             <Route path="/forum" element={<Forum />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/login/student" element={<LoginStudent />} />
+            <Route path="/login/institute" element={<LoginInstitute />} />
+            <Route path="/login/admin" element={<LoginAdmin />} />
+            <Route path="/panel/student" element={<PanelStudent />} />
+            <Route path="/panel/institute" element={<PanelInstitute />} />
+            <Route path="/panel/admin" element={<PanelAdmin />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
