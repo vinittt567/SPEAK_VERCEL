@@ -114,3 +114,14 @@
   .rdp-head_cell { @apply w-8 h-8 grid place-items-center text-muted-foreground text-[0.7rem]; }
   .rdp-cell { @apply w-8 h-8 grid place-items-center; }
 }
+
+@layer components {
+  .starry-overlay { @apply fixed inset-0 z-50; background: transparent; }
+  .starry-overlay::after { content:""; position:absolute; inset:0; pointer-events:none; background: radial-gradient(ellipse at 50% 120%, rgba(2,6,23,0.6), transparent 60%); }
+  .star { position:absolute; display:block; border-radius:9999px; background: white; box-shadow: 0 0 6px rgba(255,255,255,0.8); animation: star-fall var(--fall-dur, 1600ms) linear forwards, star-twinkle var(--twinkle-dur, 1.6s) ease-in-out infinite; }
+  .moon { position:absolute; left:10%; bottom:10%; width:64px; height:64px; border-radius:9999px; background: radial-gradient(circle at 35% 35%, #fff 0%, #f5f5f5 40%, #e2e8f0 60%, #cbd5e1 100%); box-shadow: 0 0 30px rgba(255,255,255,0.35); animation: moon-travel var(--fall-dur, 1600ms) ease-in-out forwards; }
+}
+
+@keyframes star-fall { 0% { transform: translate3d(0,-20vh,0) scale(0.9); opacity: 0; } 10% { opacity: 1; } 100% { transform: translate3d(0,110vh,0) scale(1.05); opacity: 0.9; } }
+@keyframes star-twinkle { 0%,100% { opacity: .4; } 50% { opacity: 1; } }
+@keyframes moon-travel { 0% { transform: translate(-15%, 20%) scale(.9); opacity: 0; } 20% { opacity: 1; } 100% { transform: translate(30%, -30%) scale(1); opacity: 1; } }
