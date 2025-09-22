@@ -119,12 +119,6 @@ export default function Login() {
                       Counselor
                     </a>
                   </Button>
-                  <Button asChild variant="outline" size="sm">
-                    <a href="/login/admin" className="flex items-center gap-1">
-                      <Settings className="h-3 w-3" />
-                      Admin
-                    </a>
-                  </Button>
                 </div>
               </div>
             </div>

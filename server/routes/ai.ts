@@ -9,14 +9,18 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY!);
 // Therapeutic chat endpoint
 router.post('/chat', async (req, res) => {
   try {
-    const { userMessage, conversationHistory } = req.body;
+    const { userMessage, conversationHistory, assessmentScores } = req.body;
     
     // Basic validation
     if (!userMessage) {
       return res.status(400).json({ error: 'userMessage is required' });
     }
 
-    console.log('Received chat request:', { userMessage, historyLength: conversationHistory?.length || 0 });
+    console.log('Received chat request:', { 
+      userMessage, 
+      historyLength: conversationHistory?.length || 0,
+      hasAssessmentScores: !!assessmentScores 
+    });
 
     // Build conversation context
     let contextPrompt = '';
@@ -25,6 +29,32 @@ router.post('/chat', async (req, res) => {
       conversationHistory.slice(-5).forEach((msg: any) => {
         contextPrompt += `${msg.role === 'user' ? 'User' : 'Counselor'}: ${msg.content}\n`;
       });
+    }
+
+    // Build assessment context
+    let assessmentContext = '';
+    if (assessmentScores) {
+      const { phq9, gad7, ghq } = assessmentScores;
+      
+      // Determine severity levels
+      const phq9Level = phq9 <= 4 ? 'minimal' : phq9 <= 9 ? 'mild' : phq9 <= 14 ? 'moderate' : phq9 <= 19 ? 'moderately severe' : 'severe';
+      const gad7Level = gad7 <= 4 ? 'minimal' : gad7 <= 9 ? 'mild' : gad7 <= 14 ? 'moderate' : 'severe';
+      const ghqLevel = ghq <= 11 ? 'good' : ghq <= 15 ? 'mild distress' : ghq <= 20 ? 'moderate distress' : 'severe distress';
+      
+      assessmentContext = `\n\nCLIENT ASSESSMENT PROFILE:
+- PHQ-9 Depression Score: ${phq9}/27 (${phq9Level} level)
+- GAD-7 Anxiety Score: ${gad7}/21 (${gad7Level} level)  
+- GHQ-12 General Health Score: ${ghq}/36 (${ghqLevel} level)
+
+THERAPEUTIC APPROACH BASED ON ASSESSMENT:
+${phq9 >= 15 || gad7 >= 15 || ghq >= 20 ? 
+  '- HIGH PRIORITY: Use crisis-informed, safety-focused approach. Validate distress, assess safety, provide immediate coping strategies, and gently suggest professional support.' :
+  phq9 >= 10 || gad7 >= 10 || ghq >= 15 ?
+  '- MODERATE SUPPORT: Use supportive, solution-focused approach. Validate experiences, explore coping strategies, and provide psychoeducation.' :
+  '- WELLNESS FOCUS: Use strengths-based, preventive approach. Reinforce positive coping, provide wellness strategies, and maintain supportive presence.'
+}
+
+Tailor your responses to match this assessment profile while maintaining therapeutic rapport.`;
     }
 
     const therapeuticPrompt = `You are a professional, empathetic AI counselor trained in evidence-based therapeutic approaches including CBT, DBT, and person-centered therapy. Your role is to provide supportive, non-judgmental guidance while maintaining professional boundaries.
@@ -47,6 +77,8 @@ RISK ASSESSMENT:
 - Note expressions of hopelessness, worthlessness, or isolation.
 
 Remember: You're creating a safe, supportive space where the user feels heard, understood, and empowered. Be conversational and avoid overly clinical language.
+
+${assessmentContext}
 
 ${contextPrompt}
 

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Bot, ShieldCheck, SendHorizontal, Loader2 } from "lucide-react";
+import { AssessmentFlow, AssessmentScore } from "@/components/assessments/AssessmentFlow";
 
 
 
@@ -17,14 +18,49 @@ interface Message {
 }
 
 export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>([
-    { role: "bot", text: "Hi, I'm your AI counselor. I'm here to listen and support you. How are you feeling right now?" },
-  ]);
+  const [assessmentComplete, setAssessmentComplete] = useState(() => {
+    return localStorage.getItem('assessment-complete') === 'true';
+  });
+  const [assessmentScores, setAssessmentScores] = useState<AssessmentScore | null>(() => {
+    const saved = localStorage.getItem('assessment-scores');
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+
+  const handleAssessmentComplete = (scores: AssessmentScore) => {
+    setAssessmentScores(scores);
+    setAssessmentComplete(true);
+    localStorage.setItem('assessment-complete', 'true');
+    localStorage.setItem('assessment-scores', JSON.stringify(scores));
+    
+    // Initialize chat with personalized greeting based on assessment
+    const getPersonalizedGreeting = () => {
+      const hasHighRisk = scores.phq9 >= 15 || scores.gad7 >= 15 || scores.ghq >= 20;
+      const hasModerateRisk = scores.phq9 >= 10 || scores.gad7 >= 10 || scores.ghq >= 15;
+      
+      if (hasHighRisk) {
+        return "Thank you for completing the assessment. I can see you're going through a challenging time right now, and I want you to know that reaching out shows real strength. I'm here to provide support and help you work through these feelings. How would you like to start our conversation today?";
+      } else if (hasModerateRisk) {
+        return "Thank you for completing the assessment. I can see you're experiencing some difficulties, and I'm here to help you navigate through them. You've taken a positive step by reaching out. What's been on your mind lately that you'd like to talk about?";
+      } else {
+        return "Thank you for completing the assessment. It's great to see you're taking care of your mental health! I'm here to support you in maintaining your wellbeing and help with any concerns you might have. What brings you here today?";
+      }
+    };
+
+    setMessages([
+      { role: "bot", text: getPersonalizedGreeting(), timestamp: new Date().toISOString() }
+    ]);
+  };
+
+  // If assessment not complete, show assessment flow
+  if (!assessmentComplete) {
+    return <AssessmentFlow onComplete={handleAssessmentComplete} />;
+  }
 
   const sendToAI = async (text: string) => {
     if (!text.trim()) return;
@@ -47,6 +83,7 @@ export default function Chat() {
         body: JSON.stringify({
           userMessage: text,
           conversationHistory,
+          assessmentScores,
         }),
       });
 
@@ -176,6 +213,13 @@ export default function Chat() {
       </div>
 
       <div className="space-y-4">
+        <AssessmentSummary scores={assessmentScores!} onReset={() => {
+          setAssessmentComplete(false);
+          setAssessmentScores(null);
+          setMessages([]);
+          localStorage.removeItem('assessment-complete');
+          localStorage.removeItem('assessment-scores');
+        }} />
         <WellnessBreathing />
         <GroundingFive />
         <TipsCard />
@@ -239,6 +283,63 @@ function TipsCard(){
           <li>Limit caffeine late in the day</li>
           <li>Reach out to a trusted peer</li>
         </ul>
+      </CardContent>
+    </Card>
+  );
+}
+
+function AssessmentSummary({ scores, onReset }: { scores: AssessmentScore; onReset: () => void }) {
+  const getPHQ9Level = (score: number) => {
+    if (score <= 4) return "Minimal";
+    if (score <= 9) return "Mild";
+    if (score <= 14) return "Moderate";
+    if (score <= 19) return "Mod. Severe";
+    return "Severe";
+  };
+
+  const getGAD7Level = (score: number) => {
+    if (score <= 4) return "Minimal";
+    if (score <= 9) return "Mild";
+    if (score <= 14) return "Moderate";
+    return "Severe";
+  };
+
+  const getGHQLevel = (score: number) => {
+    if (score <= 11) return "Good";
+    if (score <= 15) return "Mild";
+    if (score <= 20) return "Moderate";
+    return "Severe";
+  };
+
+  return (
+    <Card>
+      <CardContent className="p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">Assessment Summary</div>
+          <Button variant="ghost" size="sm" onClick={onReset}>
+            Retake
+          </Button>
+        </div>
+        <div className="space-y-2 text-xs">
+          <div className="flex justify-between">
+            <span>Depression (PHQ-9):</span>
+            <Badge variant="outline" className="text-xs">
+              {getPHQ9Level(scores.phq9)} ({scores.phq9}/27)
+            </Badge>
+          </div>
+          <div className="flex justify-between">
+            <span>Anxiety (GAD-7):</span>
+            <Badge variant="outline" className="text-xs">
+              {getGAD7Level(scores.gad7)} ({scores.gad7}/21)
+            </Badge>
+          </div>
+          <div className="flex justify-between">
+            <span>General Health (GHQ):</span>
+            <Badge variant="outline" className="text-xs">
+              {getGHQLevel(scores.ghq)} ({scores.ghq}/36)
+            </Badge>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
