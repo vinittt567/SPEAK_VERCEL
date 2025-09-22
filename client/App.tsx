@@ -19,6 +19,8 @@ import LoginAdmin from "./pages/LoginAdmin";
 import PanelStudent from "./pages/PanelStudent";
 import PanelInstitute from "./pages/PanelInstitute";
 import PanelAdmin from "./pages/PanelAdmin";
+import LoginCounselor from "./pages/LoginCounselor";
+import PanelCounselor from "./pages/PanelCounselor";
 import { Header } from "@/components/app/Header";
 import { CrisisFooter } from "@/components/app/CrisisFooter";
 import { DarkStarfield } from "@/components/app/DarkStarfield";
@@ -45,6 +47,8 @@ const App = () => (
             <Route path="/panel/student" element={<PanelStudent />} />
             <Route path="/panel/institute" element={<PanelInstitute />} />
             <Route path="/panel/admin" element={<PanelAdmin />} />
+            <Route path="/login/counselor" element={<LoginCounselor />} />
+            <Route path="/panel/counselor" element={<PanelCounselor />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
