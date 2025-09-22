@@ -4,16 +4,8 @@ import path from "path";
 import { createServer } from "./server";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   root: ".",
-  server: {
-    host: "::",
-    port: 8080,
-    fs: {
-      allow: [".", "./client", "./shared", "./node_modules"],
-      deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
-    },
-  },
   build: {
     outDir: "dist/spa",
   },
@@ -24,7 +16,15 @@ export default defineConfig(({ mode }) => ({
       "@shared": path.resolve(__dirname, "./shared"),
     },
   },
-}));
+  server: {
+    host: "::",
+    port: 8080,
+    fs: {
+      allow: [".", "./client", "./shared", "./node_modules"],
+      deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
+    },
+  }
+});
 
 function expressPlugin(): Plugin {
   return {

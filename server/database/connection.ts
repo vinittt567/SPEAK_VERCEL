@@ -7,6 +7,11 @@ const MONGODB_URI = `mongodb+srv://kd121:${encodedPassword}@cluster0.vzenpdh.mon
 
 let isConnected = false;
 
+// Clear all existing models to prevent duplicate compilation
+Object.keys(mongoose.models).forEach(key => {
+  delete mongoose.models[key];
+});
+
 export async function connectToDatabase() {
   if (isConnected) {
     return;

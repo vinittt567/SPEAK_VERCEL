@@ -4,11 +4,11 @@ import mongoose from 'mongoose';
 const InstitutionSchema = new mongoose.Schema({
   institutionId: { type: String, required: true, unique: true },
   name: { type: String, required: true },
-  domain: { type: String, required: true, unique: true },
+  domain: { type: String, required: true, unique: true, index: true },
   type: { type: String, required: true },
   location: { type: String, required: true },
   state: { type: String, required: true },
-  hashedDomain: { type: String, required: true }, // Hashed for privacy
+  hashedDomain: { type: String, required: true, index: true }, // Hashed for privacy
 }, {
   timestamps: true
 });
@@ -52,17 +52,31 @@ const TokenSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Create indexes for performance
-InstitutionSchema.index({ domain: 1 });
-InstitutionSchema.index({ hashedDomain: 1 });
-TempStudentSchema.index({ hashedEmail: 1 });
-TempStudentSchema.index({ institutionId: 1 });
-AnonymousUserSchema.index({ anonymousId: 1 });
-AnonymousUserSchema.index({ institutionHash: 1 });
-TokenSchema.index({ anonymousId: 1 });
+// Only create TTL index for tokens
 TokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // Auto-delete expired tokens
+
+// Schema for counselors with their meeting links
+const CounselorSchema = new mongoose.Schema({
+  counselorId: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  specialty: [{ type: String }],
+  languages: [{ type: String }],
+  mode: { type: String, enum: ['Online', 'In-person', 'Both'], required: true },
+  status: { type: String, enum: ['Available', 'Full', 'Online only'], required: true },
+  meetingInfo: {
+    platform: { type: String, enum: ['Google Meet', 'Zoom'], required: true },
+    link: { type: String, required: true }
+  }
+}, {
+  timestamps: true
+});
+
+// Create index for counselor lookups
+CounselorSchema.index({ counselorId: 1 });
+CounselorSchema.index({ status: 1 });
 
 export const Institution = mongoose.model('Institution', InstitutionSchema);
 export const TempStudent = mongoose.model('TempStudent', TempStudentSchema);
 export const AnonymousUser = mongoose.model('AnonymousUser', AnonymousUserSchema);
 export const Token = mongoose.model('Token', TokenSchema);
+export const Counselor = mongoose.model('Counselor', CounselorSchema);
