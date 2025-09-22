@@ -28,38 +28,142 @@ import { DarkStarfield } from "@/components/app/DarkStarfield";
 const App = () => {
   const { role } = useRole();
   const StudentHeader = <Header />;
-  const ActiveHeader = role === "institute" ? <InstituteHeader /> : role === "counselor" ? <CounselorHeader /> : StudentHeader;
+  const ActiveHeader =
+    role === "institute" ? (
+      <InstituteHeader />
+    ) : role === "counselor" ? (
+      <CounselorHeader />
+    ) : (
+      StudentHeader
+    );
   return (
-  <TooltipProvider>
-    <Toaster />
-    <Sonner />
-    <BrowserRouter>
-      <DarkStarfield />
-      <div className="min-h-screen flex flex-col relative z-[1]">
-        {ActiveHeader}
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={role && role !== "student" ? <Navigate to={role === "institute" ? "/panel/institute" : role === "counselor" ? "/panel/counselor" : "/admin"} replace /> : <Index />} />
-            <Route path="/chat" element={role && role !== "student" ? <Navigate to={role === "institute" ? "/panel/institute" : "/panel/counselor"} replace /> : <Chat />} />
-            <Route path="/booking" element={role && role !== "student" ? <Navigate to={role === "institute" ? "/panel/institute" : "/panel/counselor"} replace /> : <Booking />} />
-            <Route path="/resources" element={role && role !== "student" ? <Navigate to={role === "institute" ? "/panel/institute" : "/panel/counselor"} replace /> : <Resources />} />
-            <Route path="/forum" element={role && role !== "student" ? <Navigate to={role === "institute" ? "/panel/institute" : "/panel/counselor"} replace /> : <Forum />} />
-            <Route path="/admin" element={role && role !== "admin" ? <Navigate to="/login/admin" replace /> : <PanelAdmin />} />
-            <Route path="/login/student" element={<Navigate to="/" replace />} />
-            <Route path="/login/institute" element={<LoginInstitute />} />
-            <Route path="/login/admin" element={<LoginAdmin />} />
-            <Route path="/panel/student" element={<Navigate to="/" replace />} />
-            <Route path="/panel/institute" element={<PanelInstitute />} />
-            <Route path="/login/counselor" element={<LoginCounselor />} />
-            <Route path="/panel/counselor" element={<PanelCounselor />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        <CrisisFooter />
-      </div>
-    </BrowserRouter>
-  </TooltipProvider>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <DarkStarfield />
+        <div className="min-h-screen flex flex-col relative z-[1]">
+          {ActiveHeader}
+          <main className="flex-1">
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  role && role !== "student" ? (
+                    <Navigate
+                      to={
+                        role === "institute"
+                          ? "/panel/institute"
+                          : role === "counselor"
+                            ? "/panel/counselor"
+                            : "/admin"
+                      }
+                      replace
+                    />
+                  ) : (
+                    <Index />
+                  )
+                }
+              />
+              <Route
+                path="/chat"
+                element={
+                  role && role !== "student" ? (
+                    <Navigate
+                      to={
+                        role === "institute"
+                          ? "/panel/institute"
+                          : "/panel/counselor"
+                      }
+                      replace
+                    />
+                  ) : (
+                    <Chat />
+                  )
+                }
+              />
+              <Route
+                path="/booking"
+                element={
+                  role && role !== "student" ? (
+                    <Navigate
+                      to={
+                        role === "institute"
+                          ? "/panel/institute"
+                          : "/panel/counselor"
+                      }
+                      replace
+                    />
+                  ) : (
+                    <Booking />
+                  )
+                }
+              />
+              <Route
+                path="/resources"
+                element={
+                  role && role !== "student" ? (
+                    <Navigate
+                      to={
+                        role === "institute"
+                          ? "/panel/institute"
+                          : "/panel/counselor"
+                      }
+                      replace
+                    />
+                  ) : (
+                    <Resources />
+                  )
+                }
+              />
+              <Route
+                path="/forum"
+                element={
+                  role && role !== "student" ? (
+                    <Navigate
+                      to={
+                        role === "institute"
+                          ? "/panel/institute"
+                          : "/panel/counselor"
+                      }
+                      replace
+                    />
+                  ) : (
+                    <Forum />
+                  )
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  role && role !== "admin" ? (
+                    <Navigate to="/login/admin" replace />
+                  ) : (
+                    <PanelAdmin />
+                  )
+                }
+              />
+              <Route
+                path="/login/student"
+                element={<Navigate to="/" replace />}
+              />
+              <Route path="/login/institute" element={<LoginInstitute />} />
+              <Route path="/login/admin" element={<LoginAdmin />} />
+              <Route
+                path="/panel/student"
+                element={<Navigate to="/" replace />}
+              />
+              <Route path="/panel/institute" element={<PanelInstitute />} />
+              <Route path="/login/counselor" element={<LoginCounselor />} />
+              <Route path="/panel/counselor" element={<PanelCounselor />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+          <CrisisFooter />
+        </div>
+      </BrowserRouter>
+    </TooltipProvider>
   );
 };
 
