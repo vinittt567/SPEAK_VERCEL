@@ -8,7 +8,7 @@ export default function LoginInstitute(){
         role="Institute"
         expectedId="institute@edu.in"
         expectedPassword="institute123"
-        onSuccess={() => { window.location.href = "/panel/institute"; }}
+        onSuccess={(id) => { localStorage.setItem("app.role","institute"); localStorage.setItem("app.id", id); window.location.href = "/panel/institute"; }}
       />
     </div>
   );
