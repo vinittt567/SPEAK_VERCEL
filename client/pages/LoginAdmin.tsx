@@ -8,7 +8,7 @@ export default function LoginAdmin(){
         role="Admin"
         expectedId="admin@edu.in"
         expectedPassword="admin123"
-        onSuccess={() => { window.location.href = "/admin"; }}
+        onSuccess={(id) => { localStorage.setItem("app.role","admin"); localStorage.setItem("app.id", id); window.location.href = "/admin"; }}
       />
     </div>
   );
