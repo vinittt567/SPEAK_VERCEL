@@ -5,9 +5,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Shield, Globe, Bot, CalendarCheck2, GraduationCap, Building2, UserCheck, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 export default function Index() {
-  const [lang, setLang] = useState("en");
+  const { language, setLanguage, t } = useLanguage();
   const [consent, setConsent] = useState(false);
 
   return (
@@ -15,27 +17,27 @@ export default function Index() {
       <div className="container py-10">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
           <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium">Student Mental Wellness</div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium">{t('home.badge')}</div>
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-              Support when you need it—private, fast, and caring.
+              {t('home.title')}
             </h1>
             <p className="text-muted-foreground max-w-prose">
-              Chat with our AI first-aid bot, book a counselor, explore coping tools, or connect with peers. Anonymous by default. Your privacy is protected.
+              {t('home.description')}
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
               <Button asChild size="lg" className="rounded-full">
                 <Link to={consent ? "/chat" : "#"} aria-disabled={!consent} onClick={(e)=>{ if(!consent){ e.preventDefault(); }}}>
-                  <Bot className="h-5 w-5 mr-2"/> Start Chat
+                  <Bot className="h-5 w-5 mr-2"/> {t('home.startChat')}
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="rounded-full">
                 <Link to="/booking">
-                  <CalendarCheck2 className="h-5 w-5 mr-2"/> Book Counselor
+                  <CalendarCheck2 className="h-5 w-5 mr-2"/> {t('home.bookCounselor')}
                 </Link>
               </Button>
               <div className="text-xs text-muted-foreground flex items-center gap-2">
-                <Shield className="h-4 w-4"/> Pseudonym only. No names required.
+                <Shield className="h-4 w-4"/> {t('home.privacy')}
               </div>
             </div>
 
@@ -44,14 +46,14 @@ export default function Index() {
             <div className="grid sm:grid-cols-2 gap-4 pt-2">
               <Card className="bg-background/60">
                 <CardContent className="p-4">
-                  <p className="font-medium">Get help in 2 taps</p>
-                  <p className="text-sm text-muted-foreground">Open chat, pick a quick reply, and breathe. We guide you step-by-step.</p>
+                  <p className="font-medium">{t('home.quickHelp')}</p>
+                  <p className="text-sm text-muted-foreground">{t('home.quickHelpDesc')}</p>
                 </CardContent>
               </Card>
               <Card className="bg-background/60">
                 <CardContent className="p-4">
-                  <p className="font-medium">Book in under 30s</p>
-                  <p className="text-sm text-muted-foreground">Filter by language and specialty. Pick a time. Get reminders.</p>
+                  <p className="font-medium">{t('home.quickBook')}</p>
+                  <p className="text-sm text-muted-foreground">{t('home.quickBookDesc')}</p>
                 </CardContent>
               </Card>
             </div>
@@ -62,32 +64,15 @@ export default function Index() {
 
             <Card className="border-primary/20">
               <CardContent className="p-6 space-y-4">
-                <div className="flex flex-wrap items-center gap-3 justify-between">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Globe className="h-4 w-4"/>
-                    <span>Language</span>
-                  </div>
-                  <Select value={lang} onValueChange={setLang}>
-                    <SelectTrigger className="w-[180px] rounded-full">
-                      <SelectValue placeholder="Select language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="es">Español</SelectItem>
-                      <SelectItem value="fr">Français</SelectItem>
-                      <SelectItem value="hi">हिन्दी</SelectItem>
-                      <SelectItem value="zh">中文</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <LanguageSelector />
 
                 <div className="rounded-xl bg-muted/60 p-4 text-sm text-muted-foreground leading-relaxed">
-                  We respect your privacy. Conversations are anonymous and stored securely for quality and safety. By continuing, you agree to our privacy policy and consent to non-identifiable data use for improvement.
+                  {t('home.privacyText')}
                 </div>
 
                 <label className="flex items-center gap-3">
                   <Checkbox id="consent" checked={consent} onCheckedChange={(v)=> setConsent(Boolean(v))}/>
-                  <span className="text-sm">I understand and consent</span>
+                  <span className="text-sm">{t('home.consent')}</span>
                 </label>
               </CardContent>
             </Card>

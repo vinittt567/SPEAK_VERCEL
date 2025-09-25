@@ -4,7 +4,7 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import aiRoutes from "./routes/ai";
 import authRoutes from "./routes/auth";
-import { getCounselors } from "./routes/counselors";
+import { getCounselors } from "./routes/counselors.ts";
 
 export function createServer() {
   const app = express();

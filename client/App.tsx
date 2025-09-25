@@ -17,6 +17,8 @@ import PlaceholderPage from "@/components/app/PlaceholderPage";
 import Booking from "./pages/Booking";
 import Resources from "./pages/Resources";
 import Forum from "./pages/Forum";
+import Gamification from "./pages/Gamification";
+import NavigationTest from "./pages/NavigationTest";
 import Admin from "./pages/Admin";
 import LoginInstitute from "./pages/LoginInstitute";
 import LoginAdmin from "./pages/LoginAdmin";
@@ -30,6 +32,72 @@ import { CounselorHeader } from "@/components/app/CounselorHeader";
 import { useRole } from "@/hooks/use-role";
 import { CrisisFooter } from "@/components/app/CrisisFooter";
 import { DarkStarfield } from "@/components/app/DarkStarfield";
+import VapiWidget from "@/components/VapiWidget";
+import { useVapiConfig } from "@/hooks/useVapi";
+import { useLocation } from "react-router-dom";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+
+const VapiWidgetWrapper = () => {
+  const { role } = useRole();
+  const location = useLocation();
+  const vapiConfig = useVapiConfig();
+
+  // Debug logging
+  console.log('VapiWidget Debug:', {
+    role,
+    pathname: location.pathname,
+    vapiConfigured: vapiConfig.isConfigured,
+    apiKey: vapiConfig.apiKey ? 'Present' : 'Missing',
+    assistantId: vapiConfig.assistantId ? 'Present' : 'Missing'
+  });
+
+  // Show voice widget on all pages for now (ignoring role requirement for testing)
+  const showVapiWidget = 
+    vapiConfig.isConfigured &&
+    ["/", "/chat", "/resources", "/forum", "/gamification", "/navigation-test"].includes(location.pathname);
+
+  console.log('Should show Vapi widget:', showVapiWidget);
+
+  // Show widget if Vapi is configured
+  if (!vapiConfig.isConfigured) {
+    return (
+      <div className="fixed bottom-6 right-6 z-50 bg-red-500 text-white p-3 rounded-lg text-sm max-w-xs">
+        ❌ Vapi not configured<br />
+        API Key: {vapiConfig.apiKey ? '✅' : '❌'}<br />
+        Assistant ID: {vapiConfig.assistantId ? '✅' : '❌'}
+      </div>
+    );
+  }
+
+  if (!showVapiWidget) {
+    return (
+      <div className="fixed bottom-6 right-6 z-50 bg-blue-500 text-white p-3 rounded-lg text-sm">
+        📍 Wrong page: {location.pathname}
+      </div>
+    );
+  }
+
+  return (
+    <VapiWidget
+      apiKey={vapiConfig.apiKey!}
+      assistantId={vapiConfig.assistantId!}
+      theme="mental-health"
+      config={{
+        voice: {
+          provider: 'playht',
+          voiceId: 'jennifer', // Calm, empathetic voice
+        },
+        firstMessage: "Hi! I'm here to provide emotional support and guidance. How are you feeling today?",
+        // Add mental health specific configurations
+        transcriber: {
+          provider: 'deepgram',
+          model: 'nova-2',
+          language: 'en-US',
+        },
+      }}
+    />
+  );
+};
 
 const App = () => {
   const { role } = useRole();
@@ -45,9 +113,10 @@ const App = () => {
   
   return (
     <TooltipProvider>
-      <AuthProvider>
-        <Toaster />
-        <Sonner />
+      <LanguageProvider>
+        <AuthProvider>
+          <Toaster />
+          <Sonner />
         <BrowserRouter
           future={{
             v7_startTransition: true,
@@ -152,6 +221,27 @@ const App = () => {
                     )
                   }
                 />
+                <Route
+                  path="/gamification"
+                  element={
+                    role && role !== "student" ? (
+                      <Navigate
+                        to={
+                          role === "institute"
+                            ? "/panel/institute"
+                            : "/panel/counselor"
+                        }
+                        replace
+                      />
+                    ) : (
+                      <ProtectedRoute><Gamification /></ProtectedRoute>
+                    )
+                  }
+                />
+                <Route
+                  path="/navigation-test"
+                  element={<NavigationTest />}
+                />
                 
                 {/* Admin Routes */}
                 <Route
@@ -181,9 +271,11 @@ const App = () => {
               </Routes>
             </main>
             <CrisisFooter />
+            <VapiWidgetWrapper />
           </div>
         </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </TooltipProvider>
   );
 };

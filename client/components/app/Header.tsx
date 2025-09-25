@@ -2,7 +2,9 @@ import { Lock, Bot, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { ThemeToggle } from "@/components/app/ThemeToggle";
+import { LanguageSelector } from "@/components/LanguageSelector";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,17 +13,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const nav = [
-  { to: "/", label: "Home" },
-  { to: "/chat", label: "Chatbot" },
-  { to: "/booking", label: "Booking" },
-  { to: "/resources", label: "Resources" },
-  { to: "/forum", label: "Forum" },
+const getNavItems = (t: (key: string) => string) => [
+  { to: "/", label: t('nav.home') },
+  { to: "/chat", label: t('nav.chatbot') },
+  { to: "/booking", label: t('nav.booking') },
+  { to: "/resources", label: t('nav.resources') },
+  { to: "/forum", label: t('nav.forum') },
+  { to: "/gamification", label: t('nav.gamification') },
 ];
 
 export function Header() {
   const path = typeof window !== "undefined" ? window.location.pathname : "/";
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
+  const nav = getNavItems(t);
 
   const handleLogout = async () => {
     try {
@@ -59,6 +64,7 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          <LanguageSelector variant="compact" showLabel={false} className="hidden sm:flex" />
           <ThemeToggle />
           {user ? (
             <>
@@ -103,7 +109,7 @@ export function Header() {
             <Button asChild className="rounded-full">
               <a href="/chat" className="flex items-center gap-2">
                 <Bot className="h-4 w-4" />
-                Talk now
+                {t('nav.talkNow')}
               </a>
             </Button>
           )}
