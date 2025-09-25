@@ -26,7 +26,10 @@
     "firebase:init": "npx firebase init hosting",
     "firebase:serve": "npm run build:client && npx firebase serve --only hosting",
     "firebase:login": "npx firebase login",
-    "firebase:setup": "node setup-firebase.js"
+    "firebase:setup": "node setup-firebase.js",
+    "deploy:vercel": "vercel --prod",
+    "vercel:dev": "vercel dev",
+    "vercel:preview": "vercel"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
